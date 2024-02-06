@@ -1,40 +1,50 @@
 <template>
-  <!-- вынести логуку запроса фильма в компонент -->
-    <div class="movie-container">
+    <div class="movie-container" v-if="movie">
+        <btn-navigation class="movie__btn-back"
+            :image="$constants.buttons.RIGHT_BTN"/>
         <div class="movie-image-wrap" style="margin-top: 30px;">
-            <img :src=$store.getters.getMovie.posterUrl 
-                :alt=$store.getters.getMovie.posterUrl
+            <img :src= this.movie.posterUrl
+                :alt= movie.posterUrl
                 height="800px">
         </div>
         <h1 class="movie-title">
-            {{ $store.getters.getMovie.nameRu }}
+            {{ movie.nameRu }}
         </h1>
         <div class="movie-description-wrap">
             <h2 class="movie-description-about">Описание</h2>
             <p class="movie-description">
-                {{ $store.getters.getMovie.description }}
+                {{ movie.description}}
             </p>
         </div>
         <div class="movie-raiting_year-wrap">
             <span class="movie-raiting">
                 Рейтинг: 
-                {{  $store.getters.getMovie.ratingKinopoisk }}
+                {{  movie.ratingKinopoisk }}
             </span>
             <span class="movie-year">
                 Дата выхода:
-                {{ $store.getters.getMovie.year }}
+                {{ movie.year }}
             </span>
         </div>
-
     </div>
-    
 </template>
 
 <script>
+import BtnNavigation from "@/components/BtnNavigation.vue";
 export default {
-    name: 'MovieCard',
+  components: {
+      BtnNavigation
+  },
+  name: 'MovieCard',
+  mounted() {
+    this.$store.dispatch('getMovie', this.$route.params.id)
+  },
+  computed: {
+    movie() {
+      return this.$store.getters.getMovie
+    }
+  },
 }
-
 </script>
 
 <style scoped>
@@ -44,6 +54,12 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.movie__btn-back {
+    position: fixed;
+    left: 10px;
+    top: 30px;
 }
 .movie-title {
     height: 100px;

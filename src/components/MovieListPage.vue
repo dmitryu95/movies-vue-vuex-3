@@ -2,27 +2,26 @@
     <div class="container">
         <div class="list-container" 
             :class="{active: loading}">
-              <movie-small-card
-                  v-for='movie in allMovies'
-                  :key="movie.kinopoiskId"
-                  :movie = 'movie'
-                  @click='openMoviePage(movie.kinopoiskId)'/>
+            <movie-small-card
+                v-for='movie in allMovies'
+                :key="movie.kinopoiskId"
+                :movie = 'movie'
+                @click='openMoviePage(movie.kinopoiskId)'></movie-small-card>
         </div>
         <div v-show="!loading"
             class="buttons-container">
-           <!-- Вынести в константу данные изображений из стора (путь) -->
             <btn-page
                 @update-page="updatePage(-1)"
-                :image = "$store.getters.getBtnLeft" 
-                :page = "$store.getters.getNumberPage"/>
+                :image = "$constants.buttons.LEFT_BTN"
+                :page = "this.page"></btn-page>
             <p class="count-page">
-                {{ $store.getters.getNumberPage }}
+                {{ page }}
             </p>
             <btn-page
                 :class="{ active: isActive }"
                 @update-page="updatePage(+1)"
-                :image="$store.getters.getBtnRight" 
-                :page = "$store.getters.getNumberPage"/>
+                :image = "$constants.buttons.RIGHT_BTN"
+                :page = "this.page"></btn-page>
         </div>
     </div>
 </template>
@@ -30,74 +29,66 @@
 <script>
 import MovieSmallCard from './MovieSmallCard.vue';
 import BtnPage from './BtnPage.vue';
-import Loader from './Loader.vue';
-
+import { mapActions, mapGetters } from 'vuex'
 export default {
     components: {
         MovieSmallCard,
-        BtnPage,
-        Loader
+        BtnPage
     },      
     name: 'movie-list-page',
     data() {
         return {
             loading: false,
             isActive: false,
+            page: '1'
         }
     },
     mounted() {
-        console.log('номер')
-        this.sendRequest()
+        this.getMoviesList()
+        if(localStorage.page > 0 ) {
+            this.page = localStorage.page
+        } else {
+            this.page = localStorage.page = 1
+        }
     },
     computed: {
-      // сделать через mapGetters (... хуе мае)
-        allMovies() {
-            return this.$store.getters.allMovies
-        },
+        ...mapGetters(['allMovies']),
     },
     methods: {
-      // Убрать async, т.к vue реактивный, сохранить в url номер страницы, при необходимости его забирать, убрать из store
-        async updatePage(value) {
-            const newPage = parseInt(this.$store.getters.getNumberPage) + value;
-            if(this.$store.getters.getTotalPages < newPage) {
-                console.log('Не ок', this.$store.getters.getTotalPage)
-                this.isActive = true;
-            } else {
-                console.log('Все ок')
-                this.$store.dispatch('getNewPage', newPage);
-                await this.sendRequest()
-                this.isActive = false;
-            }
-        },
-        async sendRequest() {
-            try {
-                this.loading = true;
-                const response = await this.$api.getAllMovies(this.$store.getters.getNumberPage);
-                this.$store.dispatch('fetchApi', response)
-                this.$store.dispatch('getStatusAuth', response);
-                this.loading = false;
-            } catch (error) {
-                console.log('error', error)
-                this.loading = false;
-            }
-        },
-      // Захуя loading???
-        async openMoviePage(page) {
-            if(!this.loading) {
-                console.log('Вышло', page)
-                try {
-                  // В stote не надо выностить лишнее, прото пушнишься, ебать с проверкой
-                    const response = await this.$api.request.getMovie(page)
-                    if(response.status === 200) {
-                        console.log(`request: ${response.data}`)
-                        this.$router.push({ name: 'card', params: { id: `${page}` }})
-                        this.$store.dispatch('fetchApi', response)
-                    }
-                } catch(error) {
-                    console.log(`${error}`)
-                }
-            }
+      ...mapActions(['getMovies']),
+
+      getMoviesList() {
+        this.getMovies(localStorage.authKey)
+      },
+      updatePage(newPage) {
+        if(this.page < this.$store.getters.getTotalPages + 1) {
+          this.page = parseInt(localStorage.page) + newPage
+          localStorage.page = this.page
+          if(this.$store.getters.getTotalPages < this.page) {
+            this.isActive = true;
+          } else {
+            this.$store.dispatch('getNewPage', newPage);
+            this.sendRequest()
+            this.isActive = false;
+          }
         }
+      },
+      openMoviePage(movieId) {
+        this.$router.push({ name: 'card', params: { id: `${movieId}` }})
+      },
+      async sendRequest() {
+        try {
+          this.loading = true;
+          const response = await this.$api.getAllMovies(this.page);
+          console.log(`response: ${response}`)
+          this.$store.dispatch('fetchApi', response)
+          this.$store.dispatch('getStatusAuth', response);
+          this.loading = false;
+        } catch (error) {
+          console.log('error', error)
+          this.loading = false;
+        }
+      },
     }
 }
 </script>

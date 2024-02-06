@@ -2,7 +2,7 @@
     <button class="btn-container"
         @click="updatePage">
         <img class="btn-image"
-            :src=image 
+            :src='image'
             alt="btn page number"
             height="40px">
     </button>
@@ -13,7 +13,7 @@
         name: 'btn-page',
         props: {
             image: String,
-            page: String
+            page: String || Number
         },
         methods: {
             updatePage() {

@@ -31,13 +31,11 @@
 </script>
 
 <style>
-.card {
-  &__small--wrap {
+.card__small--wrap {
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-  }
 }
 
 .movie__card-small {
@@ -51,8 +49,8 @@
     cursor: pointer;
 }
 
-.movie__card-small {
-    transform: scale(1.5);
+.movie__card-small:hover {
+    transform: scale(1.1);
     transition: 1s;
 }
 

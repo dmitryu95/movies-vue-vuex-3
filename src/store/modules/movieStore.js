@@ -8,8 +8,8 @@ export default {
         maxPage: '',
         response: '',
         movies: [],
-        btnLeft: './src/assets/left-arrow.png',
-        btnRight: './src/assets/right-arrow.png',
+        btnLeft: '/assets/left-arrow.png',
+        btnRight: '/assets/right-arrow.png',
         movieId: 0,
         movie: {}
     },
@@ -26,11 +26,8 @@ export default {
             console.log('totalPages', state.maxPage)
             state.maxPage = maxPage
         },
-        setMoviePage(state, id) {
-            console.log(`id: ${id}`)
-            state.movieId = id
-        },
         setMovie(state, movie) {
+            console.log('222', movie)
             state.movie = movie
         },
         setResponse(state, response) {
@@ -41,35 +38,37 @@ export default {
         getNewPage({ commit }, pageNumber) {
             commit('setPageNumber', pageNumber)
         },
-        getKinopoiskId({ commit }, id) {
-            commit('setMoviePage', id)
-        },
         async fetchApi({ commit }, response) {
             commit('setResponse', response)
             if(response.data.items) { commit('setMovieList', response.data.items) }
             if(response.data.totalPages) { commit('setMaxPage', response.data.totalPages) }
             if(response.data) { commit('setMovie', response.data) }
         },
-        getMovies({commit, state}, key) {
+
+        getMovies({ commit }, key) {
             instance.defaults.headers.common['X-API-KEY'] = key;
-            api.getAllMovies(state.page).then((response) => {
+            api.getAllMovies(localStorage.page).then((response) => {
                 localStorage.authKey = key
                 if(response.data.items) { commit('setMovieList', response.data.items) }
                 if(response.data.totalPages) { commit('setMaxPage', response.data.totalPages) }
                 if(response.data) { commit('setMovie', response.data) }
-                router.push({ name: 'MoviesList'})
-            }).catch((err) => console.log(err))
+                router.push({ name: 'MoviesList', params: { page: `${localStorage.page}` }})
+            }).catch((err) => {
+                alert(`ошибка : ${err.response}`)
+            })
+        },
+
+        getMovie({ commit }, movieId) {
+            instance.defaults.headers.common['X-API-KEY'] = localStorage.authKey;
+            api.getMovie(movieId).then( movie => {
+                console.log('111', movie.data)
+              commit('setMovie', movie.data)
+            }). catch( err => console.log(`${err}`))
         }
     },
     getters: {  // Используется для активного возврата (аналог наблюдателя), для перезаписывания 
         allMovies(state) {
             return state.movies
-        },
-        getBtnLeft(state) {
-            return state.btnLeft
-        },
-        getBtnRight(state) {
-            return state.btnRight
         },
         getNumberPage(state) {
             return state.page
@@ -77,11 +76,8 @@ export default {
         getTotalPages(state) {
             return state.maxPage
         },
-        getMovieid(state) {
-            return state.movieId
-        }, 
         getMovie(state) {
             return state.movie
-        }
+        },
     } 
 }
