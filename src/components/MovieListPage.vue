@@ -61,33 +61,19 @@ export default {
         this.getMovies(localStorage.authKey)
       },
       updatePage(newPage) {
-        if(this.page < this.$store.getters.getTotalPages + 1) {
-          this.page = parseInt(localStorage.page) + newPage
-          localStorage.page = this.page
-          if(this.$store.getters.getTotalPages < this.page) {
-            this.isActive = true;
-          } else {
-            this.$store.dispatch('getNewPage', newPage);
-            this.sendRequest()
-            this.isActive = false;
-          }
+        //this.loading = true;
+        this.page = parseInt(localStorage.page) + newPage
+        localStorage.page = this.page
+        if(localStorage.page < 1) this.page = localStorage.page = 1
+        else if(localStorage.page > this.$store.getters.getMaxPage) {
+          this.page = localStorage.page = this.$store.getters.getMaxPage
+        } else {
+          this.$store.dispatch('getMovies', localStorage.authKey)
+          //this.loading = false;
         }
       },
       openMoviePage(movieId) {
         this.$router.push({ name: 'card', params: { id: `${movieId}` }})
-      },
-      async sendRequest() {
-        try {
-          this.loading = true;
-          const response = await this.$api.getAllMovies(this.page);
-          console.log(`response: ${response}`)
-          this.$store.dispatch('fetchApi', response)
-          this.$store.dispatch('getStatusAuth', response);
-          this.loading = false;
-        } catch (error) {
-          console.log('error', error)
-          this.loading = false;
-        }
       },
     }
 }
