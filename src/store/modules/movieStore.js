@@ -61,7 +61,6 @@ export default {
         getMovie({ commit }, movieId) {
             instance.defaults.headers.common['X-API-KEY'] = localStorage.authKey;
             api.getMovie(movieId).then( movie => {
-                console.log('111', movie.data)
               commit('setMovie', movie.data)
             }). catch( err => console.log(`${err}`))
         }
@@ -69,9 +68,6 @@ export default {
     getters: {  // Используется для активного возврата (аналог наблюдателя), для перезаписывания 
         allMovies(state) {
             return state.movies
-        },
-        getNumberPage(state) {
-            return state.page
         },
         getTotalPages(state) {
             return state.maxPage
