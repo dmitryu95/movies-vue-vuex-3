@@ -34,7 +34,6 @@ export default {
                 localStorage.authKey = key
                 if(response.data.items) { commit('setMovieList', response.data.items) }
                 if(response.data.totalPages) { commit('setMaxPage', response.data.totalPages) }
-                if(response.data) { commit('setMovie', response.data) }
                 router.push({ name: 'MoviesList', params: { page: `${localStorage.page}` }})
             }).catch((err) => {
                 alert(`ошибка : ${err.response}`)

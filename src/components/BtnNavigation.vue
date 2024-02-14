@@ -1,6 +1,6 @@
 <template>
     <button class="btn-container"
-        @click="back">
+        @click="comeBack">
         <img class="btn-image"
            :src='image'
            alt="btn navigation"
@@ -15,7 +15,7 @@ export default {
       image: String,
   },
   methods: {
-      back() {
+      comeBack() {
         this.$router.push({ name: 'MoviesList', params: { page: `${localStorage.page}` }})
       }
   },
