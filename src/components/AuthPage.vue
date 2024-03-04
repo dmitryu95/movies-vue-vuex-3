@@ -12,8 +12,8 @@
 </template>
 
 <script lang="ts">
-import {mapActions} from 'vuex'
-import {defineComponent} from "vue";
+import { mapActions } from 'vuex'
+import { defineComponent } from "vue";
 
 interface State {
   key: string;

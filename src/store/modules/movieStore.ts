@@ -15,7 +15,7 @@ interface Interface {
     }
 }
 export default {
-    state: {    // Состояния 
+    state: {    // Состояния
         page: 1,
         maxPage: 0,
         response: '',
@@ -26,7 +26,7 @@ export default {
         movie: {}
     } as Interface['state'],
 
-    mutations: {    
+    mutations: {
         setMovieList(state: Interface['state'], movieList: object[]): void {
             state.movies = movieList
             console.log("movieList 1111111111", movieList)
@@ -39,10 +39,11 @@ export default {
             console.log('222', movie)
             state.movie = movie
         },
-    }, 
+    },
     actions: {  // Для вызова мутаций -> записи списка фильмов (асинхронный запуск)
         getMovies({ commit }: { commit: Function }, key: string): void {
             instance.defaults.headers.common['X-API-KEY'] = key;
+
             api.getAllMovies(localStorage.page || 1).then((response) => {
                 localStorage.authKey = key
                 if(response.data.items) { commit('setMovieList', response.data.items) }
@@ -55,12 +56,13 @@ export default {
 
         getMovie({ commit }: { commit: Function }, movieId: number): void {
             instance.defaults.headers.common['X-API-KEY'] = localStorage.authKey;
+
             api.getMovie(movieId).then( movie => {
               commit('setMovie', movie.data)
             }). catch( err => console.log(`${err}`))
         }
     },
-    getters: {  // Используется для активного возврата (аналог наблюдателя), для перезаписывания 
+    getters: {  // Используется для активного возврата (аналог наблюдателя), для перезаписывания
         allMovies(state: Interface['state']) {
             return state.movies
         },
@@ -70,5 +72,5 @@ export default {
         getMaxPage(state: Interface['state']) {
             return state.maxPage
         }
-    } 
+    }
 }

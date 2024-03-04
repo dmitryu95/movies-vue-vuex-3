@@ -6,29 +6,30 @@
           v-for='movie in allMovies'
           :key="movie.kinopoiskId"
           :movie='movie'
-          @click='openMoviePage(movie.kinopoiskId)'></movie-small-card>
+          @click='openMoviePage(movie.kinopoiskId)'>
+      </movie-small-card>
     </div>
     <div v-show="!loading"
          class="buttons-container">
-      <btn-page
-          @update-page="updatePage(-1)"
-          :image="$constants.buttons.LEFT_BTN"
-          :page="this.page"></btn-page>
+      <ui-button
+          :imgPath="$constants.buttons.LEFT_BTN"
+          @handleBtnClick = "updatePage(-1)"
+      />
       <p class="count-page">
         {{ page }}
       </p>
-      <btn-page
-          :class="{ active: isActive }"
-          @update-page="updatePage(+1)"
-          :image="$constants.buttons.RIGHT_BTN"
-          :page="this.page"></btn-page>
+      <ui-button
+          :imgPath="$constants.buttons.RIGHT_BTN"
+          @handleBtnClick = "updatePage(1)"
+      />
     </div>
+
   </div>
 </template>
 
 <script lang="ts">
 import MovieSmallCard from './MovieSmallCard.vue';
-import BtnPage from './BtnPage.vue';
+import UiButton from "./UI/UiButton.vue";
 import { mapActions, mapGetters } from 'vuex'
 import { defineComponent } from "vue";
 
@@ -42,7 +43,7 @@ export default defineComponent({
 
   components: {
     MovieSmallCard,
-    BtnPage
+    UiButton
   },
   name: 'movie-list-page',
 
@@ -55,11 +56,7 @@ export default defineComponent({
   },
   mounted() {
     this.getMoviesList()
-    if (localStorage.page > 0) {
-      this.page = localStorage.page
-    } else {
-      this.page = localStorage.page = 1
-    }
+    this.page = localStorage.page > 0 ? parseInt(localStorage.page) : 1;
   },
   computed: {
     ...mapGetters(['allMovies']),
