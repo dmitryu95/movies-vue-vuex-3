@@ -2,7 +2,7 @@ import api from "@/services/index.js";
 import instance from "@/services/instance.js";
 import router from "@/routers/router.js";
 
-interface Interface {
+interface State {
     state: {
         maxPage: number,
         response: string,
@@ -23,16 +23,16 @@ export default {
         btnRight: '/assets/right-arrow.png',
         movieId: 0,
         movie: {}
-    } as Interface['state'],
+    } as State['state'],
 
     mutations: {
-        setMovieList(state: Interface['state'], movieList: object[]): void {
+        setMovieList(state: State['state'], movieList: object[]): void {
             state.movies = movieList
         },
-        setMaxPage(state: Interface['state'], maxPage: number): void {
+        setMaxPage(state: State['state'], maxPage: number): void {
             state.maxPage = maxPage
         },
-        setMovie(state: Interface['state'], movie: object): void {
+        setMovie(state: State['state'], movie: object): void {
             state.movie = movie
         },
     },
@@ -78,13 +78,13 @@ export default {
         }
     },
     getters: {
-        getMovies(state: Interface['state']) {
+        getMovies(state: State['state']) {
             return state.movies
         },
-        getMovie(state: Interface['state']) {
+        getMovie(state: State['state']) {
             return state.movie
         },
-        getMaxPage(state: Interface['state']) {
+        getMaxPage(state: State['state']) {
             return state.maxPage
         }
     }
