@@ -104,14 +104,6 @@ export default defineComponent({
   position: relative;
 }
 
-.active {
-  opacity: 0.2;
-}
-
-.active:hover {
-  opacity: 0.2;
-}
-
 .movie-list-page__container {
   display: flex;
   flex-wrap: wrap;
