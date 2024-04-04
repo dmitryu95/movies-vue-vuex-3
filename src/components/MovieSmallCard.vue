@@ -1,8 +1,8 @@
 <template>
   <div v-show="movie.nameRu"
-      class="movie-small-card__wrap"
+      class="movie-small-card"
   >
-    <div class="movie-small-card"
+    <div class="movie-small-card__wrap"
         :id="movie.kinopoiskId"
     >
         <div class="movie-small-card__image-wrap">
@@ -43,13 +43,6 @@ export default defineComponent({
 
 <style>
 .movie-small-card {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.movie-small-card__wrap {
     width: 300px;
     height: 400px;
     margin: 10px;
@@ -58,6 +51,13 @@ export default defineComponent({
     background-color: #ada7a6;
     border-radius: 10px;
     cursor: pointer;
+}
+
+.movie-small-card__wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .movie-small-card__wrap:hover {

@@ -1,5 +1,5 @@
 <template>
-  <div class="not-found-page__wrap"
+  <div class="not-found-page"
     @click="routToAuth">
     <h1 class="not-found-page__title">
       404 - Страница не найдена
@@ -22,7 +22,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.not-found-page__wrap {
+.not-found-page {
   display: flex;
   justify-content: center;
   align-items: center;

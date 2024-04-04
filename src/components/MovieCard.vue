@@ -1,6 +1,6 @@
 <template>
   <div v-if="movie"
-       class="movie-card__container"
+       class="movie-card"
   >
     <ui-button
         class="movie-card__btn"
@@ -103,7 +103,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.movie-card__container {
+.movie-card {
   background-color: #939ea1;
   width: 100%;
   display: flex;
