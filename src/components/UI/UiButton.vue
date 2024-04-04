@@ -1,7 +1,7 @@
 <template>
-  <button class="btn-container"
+  <button class="button"
     @click="handleClick">
-    <img class="btn-image"
+    <img class="button__image"
          :src='imgPath'
          alt="btn page number"
          height="40px">
@@ -24,17 +24,16 @@ export default defineComponent({
     handleClick(event: MouseEvent) {
       this.$emit('handleBtnClick', event)
     }
-  },
-  emits: 'handleBtnClick'
+  }
 })
 
 </script>
 
 <style scoped>
-.btn-container {
+.button {
   margin: 0 20px;
 }
-.btn-image {
+.button__image {
   padding: 0;
 }
 

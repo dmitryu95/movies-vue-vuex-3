@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import AuthPage from '../components/AuthPage.vue'
 import MovieListPage from '../components/MovieListPage.vue'
 import MovieCard from '../components/MovieCard.vue'
+import NotFoundPage from "@/components/NotFoundPage.vue";
 
 const routes = [
     {
@@ -22,6 +23,11 @@ const routes = [
         component: MovieCard,
         name: 'card',
         props: true
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        component: NotFoundPage,
+        name: 'not-found-page'
     }
 ]
 

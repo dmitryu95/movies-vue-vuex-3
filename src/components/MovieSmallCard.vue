@@ -1,19 +1,27 @@
 <template>
-  <div class="movie__card-small"
-       v-show="movie.nameRu !== null">
-    <div class="card__small-wrap"
+  <div v-show="movie.nameRu != null"
+      class="movie-small-card__wrap"
+  >
+    <div class="movie-small-card"
         @click="handleClick"
-        :id="movie.kinopoiskId">
-        <div class="card__image-small-wrap">
-            <img class="card__image-small"
-                :src="movie.posterUrl" alt="image">
+        :id="movie.kinopoiskId"
+    >
+        <div class="movie-small-card__image-wrap">
+            <img class="movie-small-card__image"
+                :src="movie.posterUrl"
+                 alt="image"
+            >
         </div>
-        <p class="card__small-title">
+        <p class="movie-small-card__title">
             {{ movie.nameRu }}
         </p>
-        <div class="card__small-rating">
-            <span class="card__rating">{{ movie.ratingKinopoisk }}</span>
-            <span class="card__year">{{ movie.year }}</span>
+        <div class="movie-small-card__rating-year-container">
+            <span class="movie-small-card__rating">
+              {{ movie.ratingKinopoisk }}
+            </span>
+            <span class="movie-small-card__year">
+              {{ movie.year }}
+            </span>
         </div>
     </div>
   </div>
@@ -22,28 +30,27 @@
 <script lang="ts">
 import {defineComponent, PropType} from "vue";
 import {Movie} from "@/types/Movie";
-
-    export default defineComponent({
-        name: 'movie-small-card',
-        props: {
-            movie: {
-              type: Object as PropType<Movie>,
-              required: true
-            }
-        },
-    })
+export default defineComponent({
+    name: 'movie-small-card',
+    props: {
+        movie: {
+          type: Object as PropType<Movie>,
+          required: true
+        }
+    },
+})
 
 </script>
 
 <style>
-.card__small-wrap {
+.movie-small-card {
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
-.movie__card-small {
+.movie-small-card__wrap {
     width: 300px;
     height: 400px;
     margin: 10px;
@@ -54,26 +61,26 @@ import {Movie} from "@/types/Movie";
     cursor: pointer;
 }
 
-.movie__card-small:hover {
+.movie-small-card__wrap:hover {
     transform: scale(1.1);
     transition: 1s;
 }
 
-.card__image-small-wrap {
+.movie-small-card__image-wrap {
     display: flex;
     justify-content: center;
 }
 
-.card__image-small {
+.movie-small-card__image {
     height: 280px;
     margin-top: 10px;
 }
 
-.card__small-title {
+.movie-small-card__title {
     margin: 10px 20px;
 }
 
-.card__small-rating {
+.movie-small-card__rating-year-container {
     display: flex;
     justify-content: space-between;
     margin: 10px 25px;

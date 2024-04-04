@@ -1,29 +1,28 @@
 <template>
-  <div class="container">
-    <div class="list-container"
+  <div class="movie-list-page">
+    <div class="movie-list-page__container"
          :class="{active: loading}">
       <movie-small-card
-          v-for='movie in allMovies'
+          v-for='movie in getMovies'
           :key="movie.kinopoiskId"
           :movie='movie'
           @click='openMoviePage(movie.kinopoiskId)'>
       </movie-small-card>
     </div>
     <div v-show="!loading"
-         class="buttons-container">
+         class="movie-list-page__buttons-container">
       <ui-button
-          :imgPath="$constants.buttons.LEFT_BTN"
+          :imgPath='buttons.LEFT_BTN'
           @handleBtnClick = "updatePage(-1)"
       />
-      <p class="count-page">
+      <p class="movie-list-page__count-page">
         {{ page }}
       </p>
       <ui-button
-          :imgPath="$constants.buttons.RIGHT_BTN"
+          :imgPath='buttons.RIGHT_BTN'
           @handleBtnClick = "updatePage(1)"
       />
     </div>
-
   </div>
 </template>
 
@@ -31,12 +30,17 @@
 import MovieSmallCard from './MovieSmallCard.vue';
 import UiButton from "./UI/UiButton.vue";
 import { mapActions, mapGetters } from 'vuex'
-import { defineComponent } from "vue";
+import {defineComponent, watch} from "vue";
+import {buttons} from "@/constants";
 
 interface State {
   loading: boolean;
   isActive: boolean;
   page: number;
+  buttons: {
+    LEFT_BTN: string;
+    RIGHT_BTN: string;
+  }
 }
 
 export default defineComponent({
@@ -51,41 +55,45 @@ export default defineComponent({
     return {
       loading: false,
       isActive: false,
-      page: 1
+      page: 1,
+      buttons,
     }
   },
   mounted() {
-    this.getMoviesList()
+    if(!this.getMovies.length) {
+      this.getMoviesList()
+    }
     this.page = localStorage.page > 0 ? parseInt(localStorage.page) : 1;
   },
   computed: {
-    ...mapGetters(['allMovies']),
+    ...mapGetters(["getMovies", "getMaxPage"]),
   },
   methods: {
-    ...mapActions(['getMovies']),
+    ...mapActions(['fetchMovies']),
 
     getMoviesList() {
-      this.getMovies(localStorage.authKey)
+      this.fetchMovies(localStorage.authKey)
     },
     updatePage(newPage: number) {
-      this.page = parseInt(localStorage.page) + newPage
-      localStorage.page = this.page
-      if (localStorage.page < 1) this.page = localStorage.page = 1
-      else if (localStorage.page > this.$store.getters.getMaxPage) {
-        this.page = localStorage.page = this.$store.getters.getMaxPage
-      } else {
-        this.$store.dispatch('getMovies', localStorage.authKey)
-      }
+      this.page = parseInt(localStorage.page)
+      this.page += newPage
+      this.page = (this.page < 1) ? 1 : (this.page > this.getMaxPage) ? this.getMaxPage : this.page;
     },
     openMoviePage(movieId: number): void {
       this.$router.push({name: 'card', params: {id: `${movieId}`}})
     },
+  },
+  watch: { // связываем localStorage.page с page отрисовки
+    page(newVal) {
+      localStorage.page = newVal
+      this.fetchMovies(localStorage.authKey)
+    }
   }
 })
 </script>
 
 <style scoped>
-.container {
+.movie-list-page {
   width: 100%;
   height: 100%;
   display: flex;
@@ -104,13 +112,13 @@ export default defineComponent({
   opacity: 0.2;
 }
 
-.list-container {
+.movie-list-page__container {
   display: flex;
   flex-wrap: wrap;
   max-width: 1280px;;
 }
 
-.buttons-container {
+.movie-list-page__buttons-container {
   display: flex;
   width: 100%;
   margin-top: 50px;
@@ -118,7 +126,7 @@ export default defineComponent({
   justify-content: center;
 }
 
-.count-page {
+.movie-list-page__count-page {
   font-size: 20px;
   margin: 0 20px;
   display: flex;
