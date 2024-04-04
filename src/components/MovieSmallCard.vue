@@ -1,9 +1,8 @@
 <template>
-  <div v-show="movie.nameRu != null"
+  <div v-show="movie.nameRu"
       class="movie-small-card__wrap"
   >
     <div class="movie-small-card"
-        @click="handleClick"
         :id="movie.kinopoiskId"
     >
         <div class="movie-small-card__image-wrap">
