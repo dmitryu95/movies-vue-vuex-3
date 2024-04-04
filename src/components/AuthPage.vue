@@ -1,5 +1,5 @@
 <template>
-  <div class="auth-page__form">
+  <div class="auth-page">
     <h1>Введите ваш ключ</h1>
     <input class="auth-page__input"
          type="text"
@@ -46,7 +46,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.auth-page__form {
+.auth-page {
   display: flex;
   flex-direction: column;
   align-items: center;
