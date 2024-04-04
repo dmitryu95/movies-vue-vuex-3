@@ -61,7 +61,7 @@ export default defineComponent({
   border: 4px solid #88b3f7;
   border-radius: 12px;
   font-size: 20px;
-  padding: 0px 5px;
+  padding: 0 5px;
   font-family: 'Times New Roman', Times, serif;
   text-align: center;
 }

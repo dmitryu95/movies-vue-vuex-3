@@ -33,7 +33,7 @@
 import MovieSmallCard from './MovieSmallCard.vue';
 import UiButton from "./UI/UiButton.vue";
 import { mapActions, mapGetters } from 'vuex'
-import {defineComponent, watch} from "vue";
+import {defineComponent} from "vue";
 import {buttons} from "@/constants";
 
 interface State {
