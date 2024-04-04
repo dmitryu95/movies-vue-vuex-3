@@ -1,6 +1,6 @@
-import api from "../../services/index.js";
-import instance from "../../services/instance.js";
-import router from "../../routers/router.js";
+import api from "@/services/index.js";
+import instance from "@/services/instance.js";
+import router from "@/routers/router.js";
 
 interface Interface {
     state: {
@@ -15,7 +15,7 @@ interface Interface {
     }
 }
 export default {
-    state: {    // Состояния
+    state: {
         maxPage: 0,
         response: '',
         movies: [],
@@ -28,7 +28,6 @@ export default {
     mutations: {
         setMovieList(state: Interface['state'], movieList: object[]): void {
             state.movies = movieList
-            console.log("movieList 1111111111", movieList)
         },
         setMaxPage(state: Interface['state'], maxPage: number): void {
             state.maxPage = maxPage
@@ -37,13 +36,14 @@ export default {
             state.movie = movie
         },
     },
-    actions: {  // Для вызова мутаций -> записи списка фильмов (асинхронный запуск)
+    actions: {
         fetchMovies({ commit }: { commit: Function }, key: string): void {
-            if(!key.trim()) {
-                alert("Введите ключ!")
+            if(!key) {
+                router.push({name: 'AuthPage'})
+            } else if(!key.trim()) {
+                alert("Kлюч отсутствует!")
             } else {
-                key.trim()
-                instance.defaults.headers.common['X-API-KEY'] = key.trim();
+                instance.defaults.headers.common['X-API-KEY'] = key?.trim();
 
                 api.fetchMovies(localStorage.page || 1)
                     .then((response) => {
@@ -57,10 +57,11 @@ export default {
                         }
                         router.push({ name: 'MoviesList', params: { page: `${localStorage.page}` }})
                     })
-                    .catch((err) => {
-                        err.response.status == 401 ?
-                        alert(`Error : Попробуйте другой ключ`) :
-                        console.log(`Error : ${err.response.data.message}`)
+                    .catch(({ response }) => {
+                        if(response.status && response.status == 401) {
+                            alert(`Error : Попробуйте другой ключ`)
+                            router.push({name: 'AuthPage'})
+                        } else console.log(`Error : ${response.data.message}`)
                     })
             }
         },
@@ -76,7 +77,7 @@ export default {
                 })
         }
     },
-    getters: {  // Используется для активного возврата (аналог наблюдателя), для перезаписывания
+    getters: {
         getMovies(state: Interface['state']) {
             return state.movies
         },

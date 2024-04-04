@@ -7,7 +7,9 @@
     >
     <button class="auth-page__button"
         type="button"
-        @click="sendRequest">Войти
+        @click="sendRequest"
+    >
+      Войти
     </button>
   </div>
 </template>

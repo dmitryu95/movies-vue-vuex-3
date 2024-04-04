@@ -1,16 +1,19 @@
 <template>
   <div class="movie-list-page">
     <div class="movie-list-page__container"
-         :class="{active: loading}">
+         :class="{active: loading}"
+    >
       <movie-small-card
           v-for='movie in getMovies'
           :key="movie.kinopoiskId"
           :movie='movie'
-          @click='openMoviePage(movie.kinopoiskId)'>
+          @click='openMoviePage(movie.kinopoiskId)'
+      >
       </movie-small-card>
     </div>
     <div v-show="!loading"
-         class="movie-list-page__buttons-container">
+         class="movie-list-page__buttons-container"
+    >
       <ui-button
           :imgPath='buttons.LEFT_BTN'
           @handleBtnClick = "updatePage(-1)"

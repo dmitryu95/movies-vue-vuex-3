@@ -1,6 +1,6 @@
 <template>
   <div class="not-found-page__wrap"
-    @click="getRouter().push({ name: 'AuthPage' })">
+    @click="routToAuth">
     <h1 class="not-found-page__title">
       404 - Страница не найдена
     </h1>
@@ -13,8 +13,8 @@ import router from "@/routers/router";
 export default defineComponent({
   name: 'not-found-page',
   methods: {
-    getRouter() {
-      return router
+    routToAuth () {
+      router.push({name: 'AuthPage'})
     }
   }
 })

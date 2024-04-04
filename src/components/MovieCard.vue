@@ -1,13 +1,15 @@
 <template>
     <div v-if="movie"
-         class="movie-card__container" >
+         class="movie-card__container"
+    >
       <ui-button
         class="movie-card__btn"
         :imgPath="buttons.LEFT_BTN"
         @handleBtnClick="comeBack"
       />
         <div class="movie-card__image-wrap"
-             style="margin-top: 30px">
+             style="margin-top: 30px"
+        >
             <img :src= this.movie.posterUrl
                   :alt= movie.posterUrl
                   height="800px"
@@ -65,7 +67,6 @@ export default defineComponent({
     ...mapGetters(["getMovie"]),
 
     movie() {
-      console.log(this.getMovie)
       return this.getMovie
     },
     description() {
